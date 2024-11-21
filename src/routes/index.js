@@ -3,7 +3,7 @@ const flexiBooking = require('./flexiBooking');
 
 const mainRouter = express.Router();
 
-mainRouter('/flexibooking',flexiBooking);
+mainRouter.use('/flexibooking',flexiBooking);
 
 
 

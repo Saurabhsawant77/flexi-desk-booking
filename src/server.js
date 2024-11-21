@@ -8,7 +8,7 @@ const mainRouter = require('../src/routes');
 const app = express();
 
 connectMongoDB(process.env.MONGODB_URL);
-
+app.use(express.json());
 app.use('/api',mainRouter);
 
 
