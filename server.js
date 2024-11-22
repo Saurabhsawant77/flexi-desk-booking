@@ -7,8 +7,10 @@ const mainRouter = require('./src/routes');
 
 const app = express();
 
-connectMongoDB(process.env.MONGODB_URL);
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+connectMongoDB(process.env.MONGODB_URL);
 app.use('/api',mainRouter);
 
 

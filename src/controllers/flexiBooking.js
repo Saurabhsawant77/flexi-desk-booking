@@ -55,6 +55,7 @@ const handleGetPaymentBookingsById = async (req, res) => {
 const handleAddPayment = async (req, res) => {
     try {
 
+        console.log(req.body);
         const createPayment = await addPayment(req,res);
         // console.log("Saurabh",createPayment);
 
