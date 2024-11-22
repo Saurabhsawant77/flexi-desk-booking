@@ -1,6 +1,6 @@
 const flexiBooking = require("../models/flexiBooking");
 const Payment = require("../models/payment");
-const { addBooking,getAllBookings,addPayment,getPaymentBookingsById, updateBookingById, updatePaymentByBookingId,deleteBookingById } = require("../services/flexiBooking");
+const { addBooking,getAllBookings,addPayment,getPaymentBookingsById, updateBookingById, updatePaymentByBookingId,deleteBookingById,filterBookings, getBookingsByGuestName } = require("../services/flexiBooking");
 const logger = require("../utils/logger");
 
 
@@ -138,5 +138,51 @@ const handleDeletePaymentByBookingId =async (req,res)=> {
     }
 }
 
-module.exports = { handleAddBooking, handleGetAllBookings, handleAddPayment, handleGetPaymentBookingsById,handleUpdateBookingById,handleUpdatePaymentByBookingId,handleDeleteBookingById,handleDeletePaymentByBookingId }
+const handleFilterBookings = async (req,res) => {
+    try {
+        const {visitDates} = req.query;
+        console.log(visitDates);
+        const visitDatesArray = visitDates ? visitDates.split(',').map(date => new Date(date)) : [];
+        console.log(visitDatesArray);
+        // const dateOfBooking = bookingDate ? new Date(bookingDate) : null;
+
+
+        if(visitDatesArray.length <=0){
+            return res.status(400).json({message: "Invalid date format"})
+        }
+
+        const bookings = await filterBookings(req,res,visitDatesArray);
+        if(!bookings || bookings.length <= 0){
+            logger.error("handleFilterBookings :: No bookings found");
+            return res.status(404).json({message: "handleFilterBookings :: No bookings found"})
+        }
+        return res.status(200).json({message: "Bookings found", bookings: bookings});
+
+    } catch (error) {
+        logger.error("handleFilterBookings :: Internal server error ",error);
+        return res.json({message: "handleFilterBookings :: Internal server error",error:error});
+    }
+}
+
+const handleGetBookingsByGuestName = async (req,res) => {
+    try {
+        const {guestName} = req.query;
+        console.log(guestName);
+        if(!guestName){
+            logger.error("handleGetBookingsByGuestName :: Invalid Guest Name");
+            return res.status(400).json({message: "handleGetBookingsByGuestName :: Invalid guest name"});
+        }
+        const bookings = await getBookingsByGuestName(req,res,guestName); 
+        if(!bookings || bookings.length <= 0){
+            logger.error("handleGetBookingsByGuestName :: No bookings found");
+            return res.status(404).json({message: "handleGetBookingsByGuestName :: No bookings found"});
+        }
+        return res.status(200).json({message: "Bookings found", bookings: bookings});
+    } catch (error) {
+        logger.error("handleGetBookingsByGuestName :: Internal server error ",error);
+        return res.json({message: "handleGetBookingsByGuestName :: Internal server error",error:error});
+    }
+}
+
+module.exports = { handleAddBooking, handleGetAllBookings, handleAddPayment, handleGetPaymentBookingsById,handleUpdateBookingById,handleUpdatePaymentByBookingId,handleDeleteBookingById,handleDeletePaymentByBookingId,handleFilterBookings,handleGetBookingsByGuestName }
 

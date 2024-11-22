@@ -1,3 +1,4 @@
+const { rejections } = require("winston");
 const flexiBooking = require("../models/flexiBooking");
 const Payment = require("../models/payment");
 
@@ -180,7 +181,7 @@ const deletePaymentByBookingId = async (req,res) =>{
             return res.status(404).json({ message: "Booking not found" })
             }
         const deletedPayment = await Payment.findOneAndDelete({booking_id: booking_id});
-        
+
         if(!deletedPayment){
             return res.status(404).json({ message: "Payment not found" })
         }
@@ -190,10 +191,34 @@ const deletePaymentByBookingId = async (req,res) =>{
     }
 }
 
-// handleAddBooking, handleGetAllBookings, handleAddPayment, handleGetPaymentBookingsById,handleUpdateBookingById,handleUpdatePaymentByBookingId,handleDeleteBookingById,handleDeletePaymentByBookingId
+const filterBookings = async (req,res,visitDatesArray) => {
+    try {
+        const filterBooking = await flexiBooking.find({visit_dates:{$in:visitDatesArray}})
+        if(!filterBooking){
+            return res.status(404).json({ message: "No bookings found" })
+        }
+        return filterBooking;
+    } catch (error) {
+        return error;
+    }
+}
+
+const getBookingsByGuestName = async (req,res,guestName) => {
+    try {
+        const guestBookings = await flexiBooking.find({guest_name : guestName});
+        if(!guestBookings){
+            return res.status(404).json({ message: "No bookings found" })
+            }
+            return guestBookings;
+    } catch (error) {
+        return error;
+    }
+}
+
+// handleAddBooking, handleGetAllBookings, handleAddPayment, handleGetPaymentBookingsById,handleUpdateBookingById,handleUpdatePaymentByBookingId,handleDeleteBookingById,handleDeletePaymentByBookingId,handleFilterBookings,handleGetBookingsByGuestName 
 
 
-module.exports = {addBooking,getAllBookings,addPayment,getPaymentBookingsById,updateBookingById,updatePaymentByBookingId,deleteBookingById}
+module.exports = {addBooking,getAllBookings,addPayment,getPaymentBookingsById,updateBookingById,updatePaymentByBookingId,deleteBookingById,filterBookings,getBookingsByGuestName}
 
 
 
