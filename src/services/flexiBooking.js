@@ -70,6 +70,7 @@ const addPayment = async (req,res) =>{
             coupon_code,
             grand_total,
             payment_method,
+            payment_status,
         } = req.body
 
         const createPayment = await Payment.create({
@@ -80,6 +81,7 @@ const addPayment = async (req,res) =>{
             coupon_code,
             grand_total,
             payment_method,
+            payment_status,
             booking_id: booking_id
         })
         // console.log(createPayment);
