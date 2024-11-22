@@ -8,7 +8,7 @@ const PaymentSchema = new mongoose.Schema({
     coupon_code: { type: String, required: false }, 
     grand_total: { type: Number, required: true },
     payment_method: { type: String, enum : ['Cash','Online'], required: true },
-    payment_status: { type: String, enum : ['Pending', 'Completed', 'Failed'] ,required: true, default:"Pending"}, 
+    payment_status: { type: String, enum : ['Pending', 'Completed', 'Failed'] ,required: true}, 
     booking_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Booking', required: true },
   },
   {
