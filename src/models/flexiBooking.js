@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 
 
 const BookingSchema = new mongoose.Schema({
@@ -42,6 +43,11 @@ const BookingSchema = new mongoose.Schema({
     type: String, 
     required: false 
 },
+// bookingId : {
+//   type: Number,
+//   required: true,
+//   unique : true
+// },
   invitee:[
     {
       invitee_name: { type: String, required: false },
@@ -57,5 +63,7 @@ const BookingSchema = new mongoose.Schema({
     timestamps: true
   }
 );
+
+BookingSchema.plugin(mongooseSequence,{inc_field : 'bookingId',start_seq: 10000})
 
 module.exports = mongoose.model('Booking', BookingSchema);
