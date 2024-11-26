@@ -309,7 +309,7 @@ const generateInvoice = (booking) => {
     )
 
     .text("Details to help you get going:", 50, 115)
-    .text(`- Booking ID: ${booking.bookingId}`, 50, 130)
+    .text(`- Booking ID: ${booking.bookingData.bookingId}`, 50, 130)
 
     .text(
       "- Location: C - 20, G Block, Bandra Kurla Complex, Mumbai, Maharashtra",

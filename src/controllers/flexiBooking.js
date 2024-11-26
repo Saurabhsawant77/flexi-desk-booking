@@ -263,7 +263,7 @@ const handleGetInvoicePDF = async (req, res) => {
     const { booking_id } = req.params;
 
     const pdf = await BILLING.findOne({ booking_id: booking_id });
-    console.log(pdf);
+    
 
     if (!pdf) {
       return res.status(404).send("PDF not found");
