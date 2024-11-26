@@ -15,6 +15,7 @@ const addBooking = async (req,res) =>{
             identification_info,
             identification_id,
             company_name,
+            special_request,
             invitee,
             isActive
         } = req.body;
@@ -30,6 +31,7 @@ const addBooking = async (req,res) =>{
             identification_info,
             identification_id,
             company_name,
+            special_request,
             invitee,
             isActive
         });
