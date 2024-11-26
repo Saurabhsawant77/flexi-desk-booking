@@ -237,7 +237,7 @@ const getBookingsByGuestName = async (req, res, guestName) => {
                 "$or" : [{guest_name : { $regex: guestName ,$options: "i" }} ]
           }
         );
-          console.log(guestBookings);
+        //   console.log(guestBookings);
       if (!guestBookings) {
         return res.status(404).json({ message: "No bookings found" });
       }
