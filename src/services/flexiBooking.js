@@ -231,7 +231,7 @@ const filterBookings = async (req, res, visitDatesArray) => {
 
 const getBookingsByGuestName = async (req, res, guestName) => {
     try {
-        console.log(guestName);
+        console.log(guestName + "guest name");
         const guestBookings = await flexiBooking.find(
             {
                 "$or" : [{guest_name : { $regex: guestName ,$options: "i" }} ]
