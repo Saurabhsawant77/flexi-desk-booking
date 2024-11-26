@@ -70,6 +70,7 @@ const addPayment = async (req,res) =>{
             coupon_code,
             grand_total,
             payment_method,
+            payment_status,
         } = req.body
 
         const createPayment = await Payment.create({
@@ -80,6 +81,7 @@ const addPayment = async (req,res) =>{
             coupon_code,
             grand_total,
             payment_method,
+            payment_status,
             booking_id: booking_id
         })
         // console.log(createPayment);
@@ -143,7 +145,6 @@ const updatePaymentByBookingId = async (req,res) => {
         }
         console.log(req.body);
         const updatedPayment = await Payment.findOneAndUpdate({booking_id:booking_id}, req.body, { new: true,runValidators: true});
-
         if(!updatedPayment){
             return res.status(404).json({message: "No payment found"});
         }
@@ -172,6 +173,7 @@ const deleteBookingById = async (req,res) =>{
         return error;
     }
 }
+
 const deletePaymentByBookingId = async (req,res) =>{
     try {
         const {booking_id} = req.params;

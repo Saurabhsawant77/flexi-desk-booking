@@ -225,7 +225,7 @@ const handleGetBookingsByGuestName = async (req, res) => {
   }
 };
 
-const HandleGenerateInvoicePDF = async (req, res) => {
+const handleGenerateInvoicePDF = async (req, res) => {
   try {
     const { booking_id } = req.params;
 
@@ -258,7 +258,7 @@ const HandleGenerateInvoicePDF = async (req, res) => {
   }
 };
 
-const HandleGetInvoicePDF = async (req, res) => {
+const handleGetInvoicePDF = async (req, res) => {
   try {
     const { booking_id } = req.params;
 
@@ -288,6 +288,6 @@ module.exports = {
   handleDeletePaymentByBookingId,
   handleFilterBookings,
   handleGetBookingsByGuestName,
-  HandleGetInvoicePDF,
-  HandleGenerateInvoicePDF,
+  handleGetInvoicePDF,
+  handleGenerateInvoicePDF,
 };

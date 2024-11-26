@@ -1,15 +1,16 @@
-require("dotenv").config();
-const express = require("express");
-const connectMongoDB = require("./src/config/db");
-const mainRouter = require("./src/routes");
-const { generateInvoice } = require("./src/services/billing");
-
+require('dotenv').config();
+const express = require('express');
+const connectMongoDB = require('./src/config/db');
+const mainRouter = require('./src/routes');
+const cors = require('cors')
 const app = express();
 
-connectMongoDB(process.env.MONGODB_URL);
 
+app.use(cors())
 app.use(express.json());
-app.use(express.static("public"))
+app.use(express.urlencoded({ extended: true }));
+connectMongoDB(process.env.MONGODB_URL);
+app.use('/api',mainRouter);
 
  
 

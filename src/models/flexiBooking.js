@@ -1,4 +1,6 @@
+const { optional } = require('joi');
 const mongoose = require('mongoose');
+const mongooseSequence = require('mongoose-sequence')(mongoose);
 
 
 const BookingSchema = new mongoose.Schema({
@@ -42,6 +44,11 @@ const BookingSchema = new mongoose.Schema({
     type: String, 
     required: false 
 },
+// bookingId : {
+//   type: Number,
+//   required: true,
+//   unique : true
+// },
   invitee:[
     {
       invitee_name: { type: String, required: false },
@@ -51,12 +58,14 @@ const BookingSchema = new mongoose.Schema({
     },
   ],
   payment_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment', required: false },
+  special_request : {type: String, optional: true},
   isActive: { type: Boolean, default: false },
-  billing_id: { type: mongoose.Schema.Types.ObjectId, ref: 'BILLING', required: false },
 },
   {
     timestamps: true
   }
 );
+
+BookingSchema.plugin(mongooseSequence,{inc_field : 'bookingId',start_seq: 10000})
 
 module.exports = mongoose.model('Booking', BookingSchema);

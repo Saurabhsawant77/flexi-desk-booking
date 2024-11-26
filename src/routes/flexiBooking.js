@@ -10,31 +10,29 @@ const {
   handleDeletePaymentByBookingId,
   handleFilterBookings,
   handleGetBookingsByGuestName,
-  HandleGetInvoicePDF,
-  HandleGenerateInvoicePDF,
+  handleGetInvoicePDF,
+  handleGenerateInvoicePDF,
 } = require("../controllers/flexiBooking");
+const { bookingSchemaValidation, bookingUpdateSchemaValidation, createPaymentSchemaValidation, updatePaymentSchemaValidation } = require("../middlewares/joiValidations");
 
 const flexiBooking = express.Router();
 
-flexiBooking.get("/", handleGetAllBookings);
-flexiBooking.get("/get-booking/:booking_id", handleGetPaymentBookingsById);
-flexiBooking.post("/add-guest", handleAddBooking);
-flexiBooking.put("/update-booking/:booking_id", handleUpdateBookingById);
-flexiBooking.put("/update-payment/:booking_id", handleUpdatePaymentByBookingId);
-flexiBooking.post("/payment/:booking_id", handleAddPayment);
-flexiBooking.delete("/delete-booking/:booking_id", handleDeleteBookingById);
-flexiBooking.delete(
-  "/delete-payment/:booking_id",
-  handleDeletePaymentByBookingId
-);
-flexiBooking.get("/filter-bookings", handleFilterBookings);
-flexiBooking.get("/search-by-guest-name/", handleGetBookingsByGuestName);
+flexiBooking.get('/',handleGetAllBookings);
+flexiBooking.get("/get-booking/:booking_id", handleGetPaymentBookingsById)
+flexiBooking.post('/add-booking',bookingSchemaValidation, handleAddBooking);
+flexiBooking.put('/update-booking/:booking_id',bookingUpdateSchemaValidation , handleUpdateBookingById);
+flexiBooking.post('/payment/:booking_id',createPaymentSchemaValidation, handleAddPayment);
+flexiBooking.put('/update-payment/:booking_id',updatePaymentSchemaValidation, handleUpdatePaymentByBookingId);
+flexiBooking.delete('/delete-booking/:booking_id', handleDeleteBookingById);
+flexiBooking.delete('/delete-payment/:booking_id', handleDeletePaymentByBookingId);
+flexiBooking.get('/filter-bookings', handleFilterBookings);
+flexiBooking.get('/search-by-guest-name/', handleGetBookingsByGuestName)
 
 flexiBooking.post(
   "/generate-invoice-pdf/:booking_id",
-  HandleGenerateInvoicePDF
+  handleGenerateInvoicePDF
 );
-flexiBooking.get("/get-invoice-pdf/:booking_id", HandleGetInvoicePDF);
+flexiBooking.get("/get-invoice-pdf/:booking_id", handleGetInvoicePDF);
 
 // flexiBooking.post('/generate-invoice',handleGenerateInvoice);
 
