@@ -48,6 +48,9 @@ const bookingSchema = Joi.object({
   
   company_name: Joi.string()
     .optional(),
+
+  special_request : Joi.string()
+  .optional(),
   
   invitee: Joi.array()
     .items(
@@ -133,6 +136,9 @@ const bookingUpdateSchema = Joi.object({
       .optional(),
     
     company_name: Joi.string()
+      .optional(),
+    
+    special_request : Joi.string()
       .optional(),
     
     invitee: Joi.array()
