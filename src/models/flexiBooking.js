@@ -1,3 +1,4 @@
+const { optional } = require('joi');
 const mongoose = require('mongoose');
 const mongooseSequence = require('mongoose-sequence')(mongoose);
 
