@@ -26,7 +26,7 @@ flexiBooking.put('/update-payment/:booking_id',updatePaymentSchemaValidation, ha
 flexiBooking.delete('/delete-booking/:booking_id', handleDeleteBookingById);
 flexiBooking.delete('/delete-payment/:booking_id', handleDeletePaymentByBookingId);
 flexiBooking.get('/filter-bookings', handleFilterBookings);
-flexiBooking.get('/search-by-guest-name/', handleGetBookingsByGuestName)
+flexiBooking.get('/search-by-guest-name/:guestName', handleGetBookingsByGuestName)
 
 flexiBooking.post(
   "/generate-invoice-pdf/:booking_id",

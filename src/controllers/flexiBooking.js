@@ -195,7 +195,7 @@ const handleFilterBookings = async (req, res) => {
 
 const handleGetBookingsByGuestName = async (req, res) => {
   try {
-    const { guestName } = req.query;
+    const  {guestName}  = req.params;
     console.log(guestName);
     if (!guestName) {
       logger.error("handleGetBookingsByGuestName :: Invalid Guest Name");
