@@ -21,6 +21,7 @@ const generateInvoice = (booking) => {
   const logoPath = path.resolve(__dirname, "../../public/images/logo.png");
   const qrPath = path.resolve(__dirname, "../../public/images/qr.jpg");
   const footerPath = path.resolve(__dirname, "../../public/images/footer.jpg");
+  const handEmojiPath = path.resolve(__dirname, "../../public/images/emoji-hand.jpg");
 
   //D:/wybrid/back-end development/assignment-4/flexi-desk-booking/src/pdf
 
@@ -277,8 +278,8 @@ const generateInvoice = (booking) => {
 
   doc
     .fontSize(10)
-
-    .text("Hey there Steve Doe", 50, 50)
+    doc.image(handEmojiPath, 50, 47, { width:13 })
+    .text("Hey there Steve Doe", 66, 50)
 
     .text("We hope you’re excited about your day with WYBRID.", 50, 65)
 
@@ -409,7 +410,7 @@ const generateInvoice = (booking) => {
       // Label (left-aligned)
       doc
         .font("Helvetica")
-        .fontSize(12)
+        .fontSize(10)
         .text(row[0], startX + 10, y, {
           width: columnWidths[0] - 10,
           align: "left",
