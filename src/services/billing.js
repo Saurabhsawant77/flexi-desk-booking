@@ -11,36 +11,16 @@ const generateInvoice = (booking) => {
   const doc = new PDFDocument({ margin: 50 });
 
   // Pipe the PDF to a file
+  const pdfDir = path.resolve(__dirname, "../../src/pdf");
+  doc.pipe(fs.createWriteStream(path.join(pdfDir, "invoice.pdf")));
 
-  doc.pipe(
-    fs.createWriteStream(
-      path.resolve(
-        __dirname,
-        "D:/wybrid/back-end development/assignment-4/flexi-desk-booking/src/pdf/invoice.pdf"
-      )
-    )
-  );
-
-  doc.pipe(fs.createWriteStream("invoice.pdf"));
+  // doc.pipe(fs.createWriteStream("invoice.pdf"));
 
   // Company Logo and Header
 
-  const logoPath = path.resolve(
-    __dirname,
-    "D:/wybrid/back-end development/assignment-4/flexi-desk-booking/public/images/logo.png"
-  );
-
-  // const qrPath = path.resolve(__dirname, "images/qr.jpg");
-  // const footerPath = path.resolve(__dirname, "images/footer.jpg");
-
-  const qrPath = path.resolve(
-    __dirname,
-    "D:/wybrid/back-end development/assignment-4/flexi-desk-booking/public/images/qr.jpg"
-  );
-  const footerPath = path.resolve(
-    __dirname,
-    "D:/wybrid/back-end development/assignment-4/flexi-desk-booking/public/images/footer.jpg"
-  );
+  const logoPath = path.resolve(__dirname, "../../public/images/logo.png");
+  const qrPath = path.resolve(__dirname, "../../public/images/qr.jpg");
+  const footerPath = path.resolve(__dirname, "../../public/images/footer.jpg");
 
   //D:/wybrid/back-end development/assignment-4/flexi-desk-booking/src/pdf
 
