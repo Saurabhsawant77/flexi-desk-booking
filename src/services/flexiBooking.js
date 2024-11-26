@@ -217,18 +217,36 @@ const filterBookings = async (req, res, visitDatesArray) => {
   }
 };
 
-const getBookingsByGuestName = async (req, res, guestName) => {
-  try {
-    const guestBookings = await flexiBooking.find({ guest_name: guestName });
-    if (!guestBookings) {
-      return res.status(404).json({ message: "No bookings found" });
-    }
-    return guestBookings;
-  } catch (error) {
-    return error;
-  }
-};
+// const getBookingsByGuestName = async (req, res, guestName) => {
+//   try {
+//     const guestBookings = await flexiBooking.find({ guest_name: guestName });
+//     if (!guestBookings) {
+//       return res.status(404).json({ message: "No bookings found" });
+//     }
+//     return guestBookings;
+//   } catch (error) {
+//     return error;
+//   }
+// };
 
+const getBookingsByGuestName = async (req, res, guestName) => {
+    try {
+        console.log(guestName + "guest name");
+        const guestBookings = await flexiBooking.find(
+            {
+                "$or" : [{guest_name : { $regex: guestName ,$options: "i" }} ]
+          }
+        );
+        //   console.log(guestBookings);
+      if (!guestBookings) {
+        return res.status(404).json({ message: "No bookings found" });
+      }
+      return guestBookings;
+    } catch (error) {
+      return error;
+    }
+  };
+  
 // handleAddBooking, handleGetAllBookings, handleAddPayment, handleGetPaymentBookingsById,handleUpdateBookingById,handleUpdatePaymentByBookingId,handleDeleteBookingById,handleDeletePaymentByBookingId,handleFilterBookings,handleGetBookingsByGuestName
 
 module.exports = {
