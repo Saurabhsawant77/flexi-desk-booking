@@ -533,7 +533,7 @@ const generateInvoice = (booking) => {
   doc
     .fontSize(8)
     .font("Helvetica-Bold")
-    .text(`Pg ${currentPage}/${currentPage+1}`, 50, currentY + 230);
+    .text(`Pg 1/${currentPage}`, 50, currentY + 230);
 
   doc
     .fontSize(7)
