@@ -270,6 +270,7 @@ const generateInvoice = (booking) => {
   doc.font("Helvetica");
   doc.text("team@accountant.com / 09034567890 / accountant.com", 350, 700);
 
+  
   //second page
 
   doc.addPage();
