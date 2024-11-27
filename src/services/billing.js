@@ -266,10 +266,11 @@ const generateInvoice = (booking) => {
 
   // Footer
 
-  doc.font("Helvetica-Bold").text("Pg 1/2", 50, 700);
+  doc.font("Helvetica-Bold").text("Pg 1/1", 50, 700);
   doc.font("Helvetica");
   doc.text("team@accountant.com / 09034567890 / accountant.com", 350, 700);
 
+  
   //second page
 
   doc.addPage();
