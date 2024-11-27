@@ -270,7 +270,7 @@ const generateInvoice = (booking) => {
   doc.font("Helvetica");
   doc.text("team@accountant.com / 09034567890 / accountant.com", 350, 700);
 
-  
+
   //second page
 
   doc.addPage();
@@ -448,7 +448,7 @@ const generateInvoice = (booking) => {
   const pageHeight = 840; // Height of the page (A4 size)
   // Height of each row
   const footerHeight = 220; // Height of the footer
-  let currentPage = 1; // Page counter to handle page numbering
+  let currentPage = 2; // Page counter to handle page numbering
 
   // Function to add a new row dynamically
   function addRow(index, name, qty, overallQty, amount) {
@@ -533,7 +533,7 @@ const generateInvoice = (booking) => {
   doc
     .fontSize(8)
     .font("Helvetica-Bold")
-    .text(`Pg ${currentPage}/2`, 50, currentY + 230);
+    .text(`Pg ${currentPage}/${currentPage+1}`, 50, currentY + 230);
 
   doc
     .fontSize(7)
