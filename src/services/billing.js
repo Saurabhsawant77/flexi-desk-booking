@@ -25,6 +25,7 @@ const generateInvoice = (booking) => {
 
   //D:/wybrid/back-end development/assignment-4/flexi-desk-booking/src/pdf
 
+  //add logo image
   doc.image(logoPath, 50, 25, { width: 50 });
   doc
     .fontSize(10)
@@ -527,7 +528,7 @@ const generateInvoice = (booking) => {
     // Increment the page counter
   }
 
-  
+
   // Footer - Ensure it goes to the next page if needed
 
   doc.image(footerPath, 50, currentY + 40, { width: 520, height: 180 });
