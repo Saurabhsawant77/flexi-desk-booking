@@ -15,6 +15,7 @@ const {
   getBookingsByGuestName,
 } = require("../services/flexiBooking");
 const logger = require("../utils/logger");
+const sendEmail = require("../utils/sendEmail");
 
 const handleAddBooking = async (req, res) => {
   try {
@@ -195,7 +196,7 @@ const handleFilterBookings = async (req, res) => {
 
 const handleGetBookingsByGuestName = async (req, res) => {
   try {
-    const  {guestName}  = req.params;
+    const { guestName } = req.params;
     console.log(guestName);
     if (!guestName) {
       logger.error("handleGetBookingsByGuestName :: Invalid Guest Name");
@@ -263,7 +264,6 @@ const handleGetInvoicePDF = async (req, res) => {
     const { booking_id } = req.params;
 
     const pdf = await BILLING.findOne({ booking_id: booking_id });
-    
 
     if (!pdf) {
       return res.status(404).send("PDF not found");
@@ -274,6 +274,20 @@ const handleGetInvoicePDF = async (req, res) => {
   } catch (error) {
     console.error("Error Get Invoice PDF:", error);
     res.status(500).send("Error Get Invoice PDF");
+  }
+};
+
+const handleInvoiceEmail = async (req, res) => {
+  const { booking_id } = req.params;
+  try {
+    const booking = await flexiBooking.findOne({ _id: booking_id });
+
+    await sendEmail(booking);
+
+    return res.status(201).json({ message: "Invoice send successfully" });
+  } catch (error) {
+    console.error("Error Get Invoice PDF:", error);
+    return res.status(500).send("Error Get Invoice PDF");
   }
 };
 
@@ -290,4 +304,5 @@ module.exports = {
   handleGetBookingsByGuestName,
   handleGetInvoicePDF,
   handleGenerateInvoicePDF,
+  handleInvoiceEmail,
 };

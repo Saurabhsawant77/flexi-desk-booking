@@ -12,6 +12,7 @@ const {
   handleGetBookingsByGuestName,
   handleGetInvoicePDF,
   handleGenerateInvoicePDF,
+  handleInvoiceEmail,
 } = require("../controllers/flexiBooking");
 const { bookingSchemaValidation, bookingUpdateSchemaValidation, createPaymentSchemaValidation, updatePaymentSchemaValidation } = require("../middlewares/joiValidations");
 
@@ -33,6 +34,12 @@ flexiBooking.post(
   handleGenerateInvoicePDF
 );
 flexiBooking.get("/get-invoice-pdf/:booking_id", handleGetInvoicePDF);
+
+flexiBooking.post(
+  "/send-invoice-pdf/:booking_id",
+  handleInvoiceEmail
+);
+ 
 
 // flexiBooking.post('/generate-invoice',handleGenerateInvoice);
 
