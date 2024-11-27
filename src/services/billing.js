@@ -21,8 +21,10 @@ const generateInvoice = (booking) => {
   const logoPath = path.resolve(__dirname, "../../public/images/logo.png");
   const qrPath = path.resolve(__dirname, "../../public/images/qr.jpg");
   const footerPath = path.resolve(__dirname, "../../public/images/footer.jpg");
-  const handEmojiPath = path.resolve(__dirname, "../../public/images/emoji-hand.jpg");
- 
+  const handEmojiPath = path.resolve(
+    __dirname,
+    "../../public/images/emoji-hand.jpg"
+  );
 
   //add logo image
   doc.image(logoPath, 50, 25, { width: 50 });
@@ -40,7 +42,11 @@ const generateInvoice = (booking) => {
 
     .text("Thane - 400604, Maharashtra - India", 50, 95)
 
-    .text("GSTIN: 67HGDG2014FGH26", 50, 110);
+    .text(
+      `${booking.bookingData.identification_info}: ${booking.bookingData.identification_id}`,
+      50,
+      110
+    );
 
   // Invoice Details (Right aligned)
 
@@ -270,16 +276,15 @@ const generateInvoice = (booking) => {
   doc.font("Helvetica");
   doc.text("team@accountant.com / 09034567890 / accountant.com", 350, 700);
 
-
   //second page
 
   doc.addPage();
 
   doc.image(logoPath, 50, 25, { width: 50 });
 
+  doc.fontSize(10);
   doc
-    .fontSize(10)
-    doc.image(handEmojiPath, 50, 47, { width:13 })
+    .image(handEmojiPath, 50, 47, { width: 13 })
     .text("Hey there Steve Doe", 66, 50)
 
     .text("We hope you’re excited about your day with WYBRID.", 50, 65)
@@ -527,7 +532,6 @@ const generateInvoice = (booking) => {
     // Increment the page counter
   }
 
-
   // Footer - Ensure it goes to the next page if needed
 
   doc.image(footerPath, 50, currentY + 40, { width: 520, height: 180 });
@@ -535,7 +539,6 @@ const generateInvoice = (booking) => {
     .fontSize(8)
     .font("Helvetica-Bold")
     .text(`Pg 1/${currentPage}`, 50, currentY + 230);
-
 
   doc
     .fontSize(7)
