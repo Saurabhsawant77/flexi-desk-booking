@@ -22,8 +22,7 @@ const generateInvoice = (booking) => {
   const qrPath = path.resolve(__dirname, "../../public/images/qr.jpg");
   const footerPath = path.resolve(__dirname, "../../public/images/footer.jpg");
   const handEmojiPath = path.resolve(__dirname, "../../public/images/emoji-hand.jpg");
-
-  //D:/wybrid/back-end development/assignment-4/flexi-desk-booking/src/pdf
+ 
 
   //add logo image
   doc.image(logoPath, 50, 25, { width: 50 });
