@@ -527,6 +527,7 @@ const generateInvoice = (booking) => {
     // Increment the page counter
   }
 
+  
   // Footer - Ensure it goes to the next page if needed
 
   doc.image(footerPath, 50, currentY + 40, { width: 520, height: 180 });
@@ -535,7 +536,7 @@ const generateInvoice = (booking) => {
     .font("Helvetica-Bold")
     .text(`Pg 1/${currentPage}`, 50, currentY + 230);
 
-    
+
   doc
     .fontSize(7)
     .font("Helvetica")
