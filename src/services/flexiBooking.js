@@ -45,8 +45,8 @@ const addBooking = async (req, res) => {
   }
 };
 
-const getAllBookings = async (req, res) => {
-  const allBookings = await flexiBooking.find({}).populate("payment_id");
+const getAllBookings = async (req, res,query) => {
+  const allBookings = await flexiBooking.find(query).populate("payment_id");
   if (!allBookings) {
     return res.status(404).json({ message: "No bookings found" });
   }

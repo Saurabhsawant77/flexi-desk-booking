@@ -13,12 +13,14 @@ const {
   handleGetInvoicePDF,
   handleGenerateInvoicePDF,
   handleInvoiceEmail,
+  handleGetFlexiBookingsFilterSearch,
 } = require("../controllers/flexiBooking");
 const { bookingSchemaValidation, bookingUpdateSchemaValidation, createPaymentSchemaValidation, updatePaymentSchemaValidation } = require("../middlewares/joiValidations");
 
 const flexiBooking = express.Router();
 
-flexiBooking.get('/',handleGetAllBookings);
+// flexiBooking.get('/',handleGetAllBookings);
+flexiBooking.get('/',handleGetFlexiBookingsFilterSearch);
 flexiBooking.get("/get-booking/:booking_id", handleGetPaymentBookingsById)
 flexiBooking.post('/add-booking',bookingSchemaValidation, handleAddBooking);
 flexiBooking.put('/update-booking/:booking_id',bookingUpdateSchemaValidation , handleUpdateBookingById);
@@ -28,7 +30,6 @@ flexiBooking.delete('/delete-booking/:booking_id', handleDeleteBookingById);
 flexiBooking.delete('/delete-payment/:booking_id', handleDeletePaymentByBookingId);
 flexiBooking.get('/filter-bookings', handleFilterBookings);
 flexiBooking.get('/search-by-guest-name/:guestName', handleGetBookingsByGuestName)
-
 flexiBooking.post(
   "/generate-invoice-pdf/:booking_id",
   handleGenerateInvoicePDF
