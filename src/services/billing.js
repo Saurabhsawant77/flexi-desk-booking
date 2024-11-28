@@ -511,6 +511,7 @@ const generateInvoice = (booking) => {
   );
 
   //invitee
+  // Add rows dynamically
   booking.bookingData.invitee.map((data, index) =>
     addRow(
       index + 2,
@@ -521,8 +522,8 @@ const generateInvoice = (booking) => {
         (booking.bookingData.invitee.length + 1)
     )
   );
-  
-  // Add rows dynamically
+
+
 
   doc
     .strokeColor("#D3D3D3")
