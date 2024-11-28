@@ -1,7 +1,6 @@
 const PDFDocument = require("pdfkit");
 const path = require("path");
 const fs = require("fs");
-
 const BILLING = require("../models/billing");
 const numberToWords = require("../utils/numberToWords");
 const formatDatesToOrdinal = require("./formatDate");
@@ -15,7 +14,7 @@ const generateInvoice = (booking) => {
   const pdfDir = path.resolve(__dirname, "../../src/pdf");
   doc.pipe(fs.createWriteStream(path.join(pdfDir, "invoice.pdf")));
 
-  // doc.pipe(fs.createWriteStream("invoice.pdf"));
+  
 
   // Company Logo and Header
 
@@ -325,12 +324,6 @@ const generateInvoice = (booking) => {
   const columnWidths = [180, 350]; // Widths of the two columns: Label, Value
   const borderRadius = 5; // Border radius
 
-  // const dates = booking.bookingData.visit_dates.map((data, index) => {
-  //   const date = new Date(data);
-  //   return date.toDateString();
-  // });
-  // console.log(dates);
-
   // Table data
   const tableData = [
     ["Booking Type", booking.bookingData.booking_type],
@@ -503,12 +496,15 @@ const generateInvoice = (booking) => {
 
   addRow(
     1,
-    booking.bookingData.guest_name,
+    booking.bookingData.guest_name + " (You)",
     `01`,
     booking.paymentData.day_passes / (booking.bookingData.invitee.length + 1),
     booking.paymentData.sub_total_cost /
       (booking.bookingData.invitee.length + 1)
   );
+
+  //invitee
+  // Add rows dynamically
   booking.bookingData.invitee.map((data, index) =>
     addRow(
       index + 2,
@@ -519,7 +515,6 @@ const generateInvoice = (booking) => {
         (booking.bookingData.invitee.length + 1)
     )
   );
-  // Add rows dynamically
 
   doc
     .strokeColor("#D3D3D3")

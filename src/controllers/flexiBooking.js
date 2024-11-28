@@ -281,7 +281,8 @@ const handleInvoiceEmail = async (req, res) => {
   const { booking_id } = req.params;
   try {
     const booking = await flexiBooking.findOne({ _id: booking_id });
-
+    
+    //send email
     await sendEmail(booking);
 
     return res.status(201).json({ message: "Invoice send successfully" });
