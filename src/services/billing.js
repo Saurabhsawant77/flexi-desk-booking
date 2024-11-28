@@ -14,7 +14,7 @@ const generateInvoice = (booking) => {
   const pdfDir = path.resolve(__dirname, "../../src/pdf");
   doc.pipe(fs.createWriteStream(path.join(pdfDir, "invoice.pdf")));
 
-  // doc.pipe(fs.createWriteStream("invoice.pdf"));
+  
 
   // Company Logo and Header
 
