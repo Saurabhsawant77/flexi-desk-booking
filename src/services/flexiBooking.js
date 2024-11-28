@@ -1,6 +1,7 @@
 const { rejections } = require("winston");
 const flexiBooking = require("../models/flexiBooking");
 const Payment = require("../models/payment");
+const logger = require("../utils/logger");
 
 const addBooking = async (req, res) => {
   try {
@@ -20,6 +21,12 @@ const addBooking = async (req, res) => {
       isActive,
     } = req.body;
 
+    for(let i=0;i<invitee.length;i++){
+        if(invitee[i].invitee_email === guest_email){
+            return false;
+        }
+    }
+    
     const booking = await flexiBooking.create({
       booking_type,
       visit_dates,
