@@ -295,13 +295,14 @@ const handleInvoiceEmail = async (req, res) => {
 const handleGetFlexiBookingsFilterSearch = async (req, res) => {
   try {
     const { visit_dates, guest_name } = req.query;
+    console.log("Hello Saurabh");
 
     let queryConditions = [];
 
     if (visit_dates) {
       const visitDatesArray = visit_dates
         .split(",")
-        .map((date) => new Date(date.trim())); 
+        .map((date) => new Date(date.trim()));
 
       if (visitDatesArray.some((date) => isNaN(date))) {
         return res
@@ -309,35 +310,31 @@ const handleGetFlexiBookingsFilterSearch = async (req, res) => {
           .json({ message: "Invalid date format in visitDates" });
       }
 
-      queryConditions.push({ visit_dates: { $in: visitDatesArray } }); 
+      queryConditions.push({ visit_dates: { $in: visitDatesArray } });
     }
 
     if (guest_name) {
       queryConditions.push({
         guest_name: { $regex: guest_name, $options: "i" },
-      }); 
-        }
-
-    if (queryConditions.length === 0) {
-      return res
-        .status(400)
-        .json({ message: "At least one filter parameter is required" });
+      });
     }
 
-    const finalQuery = { $or: queryConditions };
+    const finalQuery =
+      queryConditions.length > 0 ? { $or: queryConditions } : {};
 
+    console.log(finalQuery);
     const bookings = await getAllBookings(req, res, finalQuery);
 
     if (!bookings || bookings.length === 0) {
       return res.status(404).json({ message: "No bookings found" });
     }
 
-     
     return res.status(200).json({ success: true, data: bookings });
   } catch (error) {
-  
     logger.error("handleGetFlexiBookingsFilterSearch :: Error", error);
-     return res.status(500).json({ success: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 };
 
