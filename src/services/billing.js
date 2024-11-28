@@ -509,6 +509,8 @@ const generateInvoice = (booking) => {
     booking.paymentData.sub_total_cost /
       (booking.bookingData.invitee.length + 1)
   );
+
+  //invitee
   booking.bookingData.invitee.map((data, index) =>
     addRow(
       index + 2,
