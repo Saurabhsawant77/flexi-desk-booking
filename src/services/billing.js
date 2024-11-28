@@ -521,6 +521,7 @@ const generateInvoice = (booking) => {
         (booking.bookingData.invitee.length + 1)
     )
   );
+  
   // Add rows dynamically
 
   doc
