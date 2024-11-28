@@ -325,12 +325,6 @@ const generateInvoice = (booking) => {
   const columnWidths = [180, 350]; // Widths of the two columns: Label, Value
   const borderRadius = 5; // Border radius
 
-  // const dates = booking.bookingData.visit_dates.map((data, index) => {
-  //   const date = new Date(data);
-  //   return date.toDateString();
-  // });
-  // console.log(dates);
-
   // Table data
   const tableData = [
     ["Booking Type", booking.bookingData.booking_type],
@@ -522,8 +516,6 @@ const generateInvoice = (booking) => {
         (booking.bookingData.invitee.length + 1)
     )
   );
-
-
 
   doc
     .strokeColor("#D3D3D3")
