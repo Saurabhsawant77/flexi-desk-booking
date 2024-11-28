@@ -333,11 +333,11 @@ const handleGetFlexiBookingsFilterSearch = async (req, res) => {
     }
 
      
-    res.status(200).json({ success: true, data: bookings });
+    return res.status(200).json({ success: true, data: bookings });
   } catch (error) {
   
     logger.error("handleGetFlexiBookingsFilterSearch :: Error", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+     return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
