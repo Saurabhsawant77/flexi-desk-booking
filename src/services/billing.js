@@ -1,7 +1,6 @@
 const PDFDocument = require("pdfkit");
 const path = require("path");
 const fs = require("fs");
-
 const BILLING = require("../models/billing");
 const numberToWords = require("../utils/numberToWords");
 const formatDatesToOrdinal = require("./formatDate");
