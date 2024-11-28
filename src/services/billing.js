@@ -535,13 +535,13 @@ const generateInvoice = (booking) => {
   doc
     .fontSize(8)
     .font("Helvetica-Bold")
-    .text(`Pg 1/${currentPage+2}`, 50, currentY + 230)
+    .text(`Pg 1/${currentPage+1}`, 50, currentY + 230)
     .fontSize(7)
     .font("Helvetica")
     .text(
       "team@accountant.com / 09034567890 / accountant.com",
       50,
-      booking.bookingData.invitee.length >= 4 ? currentY - 495 : currentY + 230,
+     currentY + 230,
       {
         align: "right",
       }
