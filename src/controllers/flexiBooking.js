@@ -15,6 +15,7 @@ const {
   getBookingsByGuestName,
 } = require("../services/flexiBooking");
 const logger = require("../utils/logger");
+const sendEmail = require("../utils/sendEmail");
 
 const handleAddBooking = async (req, res) => {
   try {
@@ -195,7 +196,7 @@ const handleFilterBookings = async (req, res) => {
 
 const handleGetBookingsByGuestName = async (req, res) => {
   try {
-    const  {guestName}  = req.params;
+    const { guestName } = req.params;
     console.log(guestName);
     if (!guestName) {
       logger.error("handleGetBookingsByGuestName :: Invalid Guest Name");
@@ -263,7 +264,6 @@ const handleGetInvoicePDF = async (req, res) => {
     const { booking_id } = req.params;
 
     const pdf = await BILLING.findOne({ booking_id: booking_id });
-    
 
     if (!pdf) {
       return res.status(404).send("PDF not found");
@@ -277,52 +277,69 @@ const handleGetInvoicePDF = async (req, res) => {
   }
 };
 
-const handleGetFlexiBookingsFilterSearch = async (req, res) => {
-    try {
+const handleInvoiceEmail = async (req, res) => {
+  const { booking_id } = req.params;
+  try {
+    const booking = await flexiBooking.findOne({ _id: booking_id });
 
+    //send email
+    await sendEmail(booking);
 
-        const { visit_dates, guest_name } = req.query;
-
-
-        let query = {};
-
-
-        if (visit_dates) {
-            console.log("Inside IF");
-            const visitDatesArray = visit_dates
-                .split(",")
-                .map((date) => new Date(date.trim())); // Convert to Date objects
-            console.log(visitDatesArray);
-            if (visitDatesArray.some((date) => isNaN(date))) {
-                return res.status(400).json({ message: "Invalid date format in visitDates" });
-            }
-            query.visit_dates = { $in: visitDatesArray }; // MongoDB `$in` for matching multiple dates
-
-        }
-
-
-        if (guest_name) {
-            query.guest_name = { $regex: guest_name ,$options: "i" }; // Case-insensitive regex
-        }
-
-        // Fetch data from the database based on the constructed query
-        console.log(query);
-        const bookings = await getAllBookings(req,res,query);
-
-        // Handle case where no bookings are found
-        if (!bookings || bookings.length === 0) {
-            return res.status(404).json({ message: "No bookings found" });
-        }
-
-        // Respond with the filtered bookings
-        res.status(200).json({ success: true, data: bookings });
-    } catch (error) {
-        // Log the error and respond with an error message
-        console.error("handleGetFlexiBookingsFilterSearch :: Error", error);
-        res.status(500).json({ success: false, message: "Internal server error" });
-    }
+    return res.status(201).json({ message: "Invoice send successfully" });
+  } catch (error) {
+    console.error("Error Get Invoice PDF:", error);
+    return res.status(500).send("Error Get Invoice PDF");
+  }
 };
 
+const handleGetFlexiBookingsFilterSearch = async (req, res) => {
+  try {
+    const { visit_dates, guest_name } = req.query;
+
+    let queryConditions = [];
+
+    if (visit_dates) {
+      const visitDatesArray = visit_dates
+        .split(",")
+        .map((date) => new Date(date.trim())); 
+
+      if (visitDatesArray.some((date) => isNaN(date))) {
+        return res
+          .status(400)
+          .json({ message: "Invalid date format in visitDates" });
+      }
+
+      queryConditions.push({ visit_dates: { $in: visitDatesArray } }); 
+    }
+
+    if (guest_name) {
+      queryConditions.push({
+        guest_name: { $regex: guest_name, $options: "i" },
+      }); 
+        }
+
+    if (queryConditions.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "At least one filter parameter is required" });
+    }
+
+    const finalQuery = { $or: queryConditions };
+
+    const bookings = await getAllBookings(req, res, finalQuery);
+
+    if (!bookings || bookings.length === 0) {
+      return res.status(404).json({ message: "No bookings found" });
+    }
+
+     
+    res.status(200).json({ success: true, data: bookings });
+  } catch (error) {
+  
+    logger.error("handleGetFlexiBookingsFilterSearch :: Error", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
 
 module.exports = {
   handleAddBooking,
@@ -337,5 +354,6 @@ module.exports = {
   handleGetBookingsByGuestName,
   handleGetInvoicePDF,
   handleGenerateInvoicePDF,
-  handleGetFlexiBookingsFilterSearch
+  handleInvoiceEmail,
+  handleGetFlexiBookingsFilterSearch,
 };

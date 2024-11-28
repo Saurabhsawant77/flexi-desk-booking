@@ -1,9 +1,9 @@
 const PDFDocument = require("pdfkit");
 const path = require("path");
 const fs = require("fs");
-
 const BILLING = require("../models/billing");
 const numberToWords = require("../utils/numberToWords");
+const formatDatesToOrdinal = require("./formatDate");
 
 // Create a new PDF document
 
@@ -14,17 +14,19 @@ const generateInvoice = (booking) => {
   const pdfDir = path.resolve(__dirname, "../../src/pdf");
   doc.pipe(fs.createWriteStream(path.join(pdfDir, "invoice.pdf")));
 
-  // doc.pipe(fs.createWriteStream("invoice.pdf"));
+  
 
   // Company Logo and Header
 
   const logoPath = path.resolve(__dirname, "../../public/images/logo.png");
   const qrPath = path.resolve(__dirname, "../../public/images/qr.jpg");
   const footerPath = path.resolve(__dirname, "../../public/images/footer.jpg");
-  const handEmojiPath = path.resolve(__dirname, "../../public/images/emoji-hand.jpg");
+  const handEmojiPath = path.resolve(
+    __dirname,
+    "../../public/images/emoji-hand.jpg"
+  );
 
-  //D:/wybrid/back-end development/assignment-4/flexi-desk-booking/src/pdf
-
+  //add logo image
   doc.image(logoPath, 50, 25, { width: 50 });
   doc
     .fontSize(10)
@@ -40,7 +42,11 @@ const generateInvoice = (booking) => {
 
     .text("Thane - 400604, Maharashtra - India", 50, 95)
 
-    .text("GSTIN: 67HGDG2014FGH26", 50, 110);
+    .text(
+      `${booking.bookingData.identification_info}: ${booking.bookingData.identification_id}`,
+      50,
+      110
+    );
 
   // Invoice Details (Right aligned)
 
@@ -64,7 +70,7 @@ const generateInvoice = (booking) => {
   doc
     .text("To,", 50, 150)
     .font("Helvetica-Bold")
-    .text("Steve Doe", 50, 165)
+    .text(booking.bookingData.guest_name, 50, 165)
     .font("Helvetica")
 
     .text("Olive Pipe & Associates", 50, 180)
@@ -266,7 +272,7 @@ const generateInvoice = (booking) => {
 
   // Footer
 
-  doc.font("Helvetica-Bold").text("Pg 1/2", 50, 700);
+  doc.font("Helvetica-Bold").text("Pg 1/1", 50, 700);
   doc.font("Helvetica");
   doc.text("team@accountant.com / 09034567890 / accountant.com", 350, 700);
 
@@ -276,15 +282,17 @@ const generateInvoice = (booking) => {
 
   doc.image(logoPath, 50, 25, { width: 50 });
 
+  doc.fontSize(10);
   doc
-    .fontSize(10)
-    doc.image(handEmojiPath, 50, 47, { width:13 })
+    .image(handEmojiPath, 50, 47, { width: 13 })
     .text("Hey there Steve Doe", 66, 50)
 
     .text("We hope you’re excited about your day with WYBRID.", 50, 65)
 
     .text(
-      "Your booking at 67 Kumar Enclave is confirmed for 18th Aug, 2023.",
+      `Your booking at 67 Kumar Enclave is confirmed for ${formatDatesToOrdinal(
+        [booking.bookingData.createdAt]
+      )}.`,
       50,
       80
     )
@@ -295,9 +303,9 @@ const generateInvoice = (booking) => {
     .text(
       "- Location: C - 20, G Block, Bandra Kurla Complex, Mumbai, Maharashtra",
       50,
-      140
+      142
     )
-    .text("- Timings: 9:00 AM to 8:00 PM", 50, 150);
+    .text("- Timings: 9:00 AM to 8:00 PM", 50, 155);
 
   const imageWidth = 90; // Desired width of the image
   const xPosition = doc.page.width - imageWidth - doc.page.margins.right; // Calculate the x-coordinate for alignment
@@ -316,18 +324,12 @@ const generateInvoice = (booking) => {
   const columnWidths = [180, 350]; // Widths of the two columns: Label, Value
   const borderRadius = 5; // Border radius
 
-  const dates = booking.bookingData.visit_dates.map((data, index) => {
-    const date = new Date(data);
-    return date.toDateString();
-  });
-  console.log(dates);
-
   // Table data
   const tableData = [
     ["Booking Type", booking.bookingData.booking_type],
-    ["Booking Date", dates],
+    ["Booking Date", formatDatesToOrdinal(booking.bookingData.visit_dates)],
     ["No. of Day Passes", booking.paymentData.day_passes],
-    ["Visit Date", dates],
+    ["Visit Date", formatDatesToOrdinal(booking.bookingData.visit_dates)],
     ["Total Cost (Exclusive GST)", booking.paymentData.sub_total_cost],
     ["Payment Method", booking.paymentData.payment_method],
   ];
@@ -447,7 +449,7 @@ const generateInvoice = (booking) => {
   const pageHeight = 840; // Height of the page (A4 size)
   // Height of each row
   const footerHeight = 220; // Height of the footer
-  let currentPage = 1; // Page counter to handle page numbering
+  let currentPage = 2; // Page counter to handle page numbering
 
   // Function to add a new row dynamically
   function addRow(index, name, qty, overallQty, amount) {
@@ -494,12 +496,15 @@ const generateInvoice = (booking) => {
 
   addRow(
     1,
-    booking.bookingData.guest_name,
+    booking.bookingData.guest_name + " (You)",
     `01`,
     booking.paymentData.day_passes / (booking.bookingData.invitee.length + 1),
     booking.paymentData.sub_total_cost /
       (booking.bookingData.invitee.length + 1)
   );
+
+  //invitee
+  // Add rows dynamically
   booking.bookingData.invitee.map((data, index) =>
     addRow(
       index + 2,
@@ -510,7 +515,6 @@ const generateInvoice = (booking) => {
         (booking.bookingData.invitee.length + 1)
     )
   );
-  // Add rows dynamically
 
   doc
     .strokeColor("#D3D3D3")
@@ -532,16 +536,18 @@ const generateInvoice = (booking) => {
   doc
     .fontSize(8)
     .font("Helvetica-Bold")
-    .text(`Pg ${currentPage}/2`, 50, currentY + 230);
+    .text(`Pg 1/${currentPage}`, 50, currentY + 230);
 
   doc
     .fontSize(7)
     .font("Helvetica")
     .text(
       "team@accountant.com / 09034567890 / accountant.com",
-      380,
+      50,
       currentY + 230
-    );
+    ,{
+      align: "right",
+    });
 
   // Create a buffer to store the PDF in memory
   const buffers = [];
