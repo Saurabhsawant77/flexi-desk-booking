@@ -543,9 +543,11 @@ const generateInvoice = (booking) => {
     .font("Helvetica")
     .text(
       "team@accountant.com / 09034567890 / accountant.com",
-      380,
+      50,
       currentY + 230
-    );
+    ,{
+      align: "right",
+    });
 
   // Create a buffer to store the PDF in memory
   const buffers = [];
