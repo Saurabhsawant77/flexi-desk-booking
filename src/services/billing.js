@@ -4,6 +4,7 @@ const fs = require("fs");
 
 const BILLING = require("../models/billing");
 const numberToWords = require("../utils/numberToWords");
+const formatDatesToOrdinal = require("./formatDate");
 
 // Create a new PDF document
 
@@ -290,7 +291,9 @@ const generateInvoice = (booking) => {
     .text("We hope you’re excited about your day with WYBRID.", 50, 65)
 
     .text(
-      "Your booking at 67 Kumar Enclave is confirmed for 18th Aug, 2023.",
+      `Your booking at 67 Kumar Enclave is confirmed for ${formatDatesToOrdinal(
+        [booking.bookingData.createdAt]
+      )}.`,
       50,
       80
     )
@@ -322,18 +325,18 @@ const generateInvoice = (booking) => {
   const columnWidths = [180, 350]; // Widths of the two columns: Label, Value
   const borderRadius = 5; // Border radius
 
-  const dates = booking.bookingData.visit_dates.map((data, index) => {
-    const date = new Date(data);
-    return date.toDateString();
-  });
-  console.log(dates);
+  // const dates = booking.bookingData.visit_dates.map((data, index) => {
+  //   const date = new Date(data);
+  //   return date.toDateString();
+  // });
+  // console.log(dates);
 
   // Table data
   const tableData = [
     ["Booking Type", booking.bookingData.booking_type],
-    ["Booking Date", dates],
+    ["Booking Date", formatDatesToOrdinal(booking.bookingData.visit_dates)],
     ["No. of Day Passes", booking.paymentData.day_passes],
-    ["Visit Date", dates],
+    ["Visit Date", formatDatesToOrdinal(booking.bookingData.visit_dates)],
     ["Total Cost (Exclusive GST)", booking.paymentData.sub_total_cost],
     ["Payment Method", booking.paymentData.payment_method],
   ];
