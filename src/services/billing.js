@@ -70,7 +70,7 @@ const generateInvoice = (booking) => {
   doc
     .text("To,", 50, 150)
     .font("Helvetica-Bold")
-    .text("Steve Doe", 50, 165)
+    .text(booking.bookingData.guest_name, 50, 165)
     .font("Helvetica")
 
     .text("Olive Pipe & Associates", 50, 180)
@@ -303,9 +303,9 @@ const generateInvoice = (booking) => {
     .text(
       "- Location: C - 20, G Block, Bandra Kurla Complex, Mumbai, Maharashtra",
       50,
-      140
+      142
     )
-    .text("- Timings: 9:00 AM to 8:00 PM", 50, 150);
+    .text("- Timings: 9:00 AM to 8:00 PM", 50, 155);
 
   const imageWidth = 90; // Desired width of the image
   const xPosition = doc.page.width - imageWidth - doc.page.margins.right; // Calculate the x-coordinate for alignment
