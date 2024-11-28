@@ -9,12 +9,10 @@ const formatDatesToOrdinal = require("./formatDate");
 
 const generateInvoice = (booking) => {
   const doc = new PDFDocument({ margin: 50 });
-
+  let currentPage = 1;
   // Pipe the PDF to a file
   const pdfDir = path.resolve(__dirname, "../../src/pdf");
   doc.pipe(fs.createWriteStream(path.join(pdfDir, "invoice.pdf")));
-
-  
 
   // Company Logo and Header
 
@@ -272,7 +270,7 @@ const generateInvoice = (booking) => {
 
   // Footer
 
-  doc.font("Helvetica-Bold").text("Pg 1/1", 50, 700);
+  doc.font("Helvetica-Bold").text(`Pg 1/${currentPage}`, 50, 700);
   doc.font("Helvetica");
   doc.text("team@accountant.com / 09034567890 / accountant.com", 350, 700);
 
@@ -449,7 +447,7 @@ const generateInvoice = (booking) => {
   const pageHeight = 840; // Height of the page (A4 size)
   // Height of each row
   const footerHeight = 220; // Height of the footer
-  let currentPage = 2; // Page counter to handle page numbering
+  // Page counter to handle page numbering
 
   // Function to add a new row dynamically
   function addRow(index, name, qty, overallQty, amount) {
@@ -525,6 +523,7 @@ const generateInvoice = (booking) => {
   if (currentY + footerHeight > pageHeight) {
     doc.addPage(); // Add a new page if there’s not enough space for the footer
     currentY = 420; // Reset Y for the new page
+
     currentPage++;
 
     // Increment the page counter
@@ -536,18 +535,17 @@ const generateInvoice = (booking) => {
   doc
     .fontSize(8)
     .font("Helvetica-Bold")
-    .text(`Pg 1/${currentPage}`, 50, currentY + 230);
-
-  doc
+    .text(`Pg 1/${currentPage+1}`, 50, currentY + 230)
     .fontSize(7)
     .font("Helvetica")
     .text(
       "team@accountant.com / 09034567890 / accountant.com",
       50,
-      currentY + 230
-    ,{
-      align: "right",
-    });
+      booking.bookingData.invitee.length >= 4 ? currentY - 495 : currentY + 230,
+      {
+        align: "right",
+      }
+    );
 
   // Create a buffer to store the PDF in memory
   const buffers = [];
