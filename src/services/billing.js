@@ -503,7 +503,7 @@ const generateInvoice = (booking) => {
 
   addRow(
     1,
-    booking.bookingData.guest_name,
+    booking.bookingData.guest_name + " (You)",
     `01`,
     booking.paymentData.day_passes / (booking.bookingData.invitee.length + 1),
     booking.paymentData.sub_total_cost /
