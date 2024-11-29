@@ -22,6 +22,7 @@ const handleAddBooking = async (req, res) => {
     console.log(req.body);
 
     const newBooking = await addBooking(req);
+    console.log(newBooking, "saurabh sawant");
 
     if (!newBooking) {
       return res.status(400).json({ message: "Failed to add booking" });
