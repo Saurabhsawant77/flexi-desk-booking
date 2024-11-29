@@ -58,7 +58,9 @@ const BookingSchema = new mongoose.Schema({
     },
   ],
   payment_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment', required: false },
-  special_request : {type: String, required: false },
+  special_request : {type: String, required: false},
+  day_passes: { type: Number, required: true },
+  sub_total_cost: { type: Number, required: true },
   isActive: { type: Boolean, default: false },
 },
   {

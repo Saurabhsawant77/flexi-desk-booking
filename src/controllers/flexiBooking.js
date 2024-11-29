@@ -22,10 +22,11 @@ const handleAddBooking = async (req, res) => {
     console.log(req.body);
 
     const newBooking = await addBooking(req);
-    console.log("Saurabh", newBooking);
+    console.log(newBooking, "saurabh sawant");
+
     if (!newBooking) {
       return res.status(400).json({ message: "Failed to add booking" });
-    }
+    }   
     res
       .status(201)
       .json({ message: "Booking created successfully", booking: newBooking });
