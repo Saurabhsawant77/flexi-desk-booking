@@ -26,7 +26,7 @@ const handleAddBooking = async (req, res) => {
 
     if (!newBooking) {
       return res.status(400).json({ message: "Failed to add booking" });
-    }   
+    }
     res
       .status(201)
       .json({ message: "Booking created successfully", booking: newBooking });
@@ -231,32 +231,55 @@ const handleGenerateInvoicePDF = async (req, res) => {
   try {
     const { booking_id } = req.params;
 
-    const bookingData = await flexiBooking.findOne({
-      _id: booking_id,
-    });
+    if (!booking_id) {
+      return res.status(400).json({ message: "Booking ID is required" });
+    }
 
-    const paymentData = await Payment.findOne({
-      booking_id: booking_id,
-    });
+    // Fetch booking and payment data
+    const bookingData = await flexiBooking.findById(booking_id);
+    const paymentData = await Payment.findOne({ booking_id });
 
-    const pdf = await BILLING.create({
-      booking_id: booking_id,
-      bookingData: bookingData,
-      paymentData: paymentData,
-    });
+    if (!bookingData) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Booking not found" });
+    }
+    if (!paymentData) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Payment data not found" });
+    }
+
+    // Check if a PDF entry exists for this booking
+    let pdf = await BILLING.findOne({ booking_id });
+
+    if (!pdf) {
+      // Create a new PDF entry
+      pdf = new BILLING({
+        booking_id,
+        bookingData,
+        paymentData,
+      });
+    } else {
+      // Update existing PDF entry with modified data
+      pdf.bookingData = bookingData;
+      pdf.paymentData = paymentData;
+    }
+
+    // Save the updated PDF data
     await pdf.save();
 
-    const pdfData = await BILLING.findOne({ booking_id: booking_id });
-    console.log(pdfData);
-
-    await generateInvoice(pdfData);
+    // Generate the PDF
+    await generateInvoice(pdf);
 
     return res.status(201).json({
       message: "PDF invoice has been generated successfully",
     });
   } catch (error) {
-    console.error("Error Generate Invoice PDF:", error);
-    return res.status(500).send("Error Generate Invoice PDF:");
+    logger.error("Error generating invoice PDF", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error", error });
   }
 };
 
