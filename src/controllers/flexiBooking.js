@@ -279,7 +279,7 @@ const handleGenerateInvoicePDF = async (req, res) => {
     logger.error("Error generating invoice PDF", error);
     return res
       .status(500)
-      .json({ success: false, message: "Internal server error", error });
+      .json({ message: "Internal server error", error });
   }
 };
 
