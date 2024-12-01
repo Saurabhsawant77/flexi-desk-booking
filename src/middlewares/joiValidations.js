@@ -51,7 +51,7 @@ const bookingSchema = Joi.object({
       "array.base": "Invitee must be an array",
     }),
 
-  isActive: Joi.boolean().default(false),
+  isActive: Joi.boolean().default(true),
 });
 
 const bookingSchemaValidation = (req, res, next) => {
