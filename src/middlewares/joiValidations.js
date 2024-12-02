@@ -71,7 +71,7 @@ const bookingSchema = Joi.object({
     .optional(),
   
   isActive: Joi.boolean()
-    .default(false),
+    .default(true),
 });
 
 const bookingSchemaValidation = (req,res,next) => {

@@ -61,7 +61,7 @@ const BookingSchema = new mongoose.Schema({
   special_request : {type: String, required: false},
   day_passes: { type: Number, required: true },
   sub_total_cost: { type: Number, required: true },
-  isActive: { type: Boolean, default: false },
+  isActive: { type: Boolean, default: true },
 },
   {
     timestamps: true
