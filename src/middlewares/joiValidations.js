@@ -63,7 +63,8 @@ const bookingSchema = Joi.object({
 const bookingSchemaValidation = (req, res, next) => {
   try {
     console.log("inside booking validation -- ",req.body);
-    if (req.body.special_request === "") {
+    if (req.body.special_request === '') {
+        console.log(req.body.special_request + " if inside booking validation");
         req.body.special_request = "NA";
     }
     const { error, value } = bookingSchema.validate(req.body, {
