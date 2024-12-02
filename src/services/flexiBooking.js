@@ -18,17 +18,15 @@ const addBooking = async (req, res) => {
       company_name,
       special_request,
       invitee,
-      day_passes,
-      sub_total_cost,
       isActive,
     } = req.body;
 
-    for(let i=0;i<invitee.length;i++){
-        if(invitee[i].invitee_email === guest_email){
-            return false;
-        }
+    for (let i = 0; i < invitee.length; i++) {
+      if (invitee[i].invitee_email === guest_email) {
+        return false;
+      }
     }
-    
+
     const booking = await flexiBooking.create({
       booking_type,
       visit_dates,
@@ -42,8 +40,6 @@ const addBooking = async (req, res) => {
       company_name,
       special_request,
       invitee,
-      day_passes,
-      sub_total_cost,
       isActive,
     });
 
@@ -56,7 +52,7 @@ const addBooking = async (req, res) => {
   }
 };
 
-const getAllBookings = async (req, res,query) => {
+const getAllBookings = async (req, res, query) => {
   const allBookings = await flexiBooking.find(query).populate("payment_id");
   if (!allBookings) {
     return res.status(404).json({ message: "No bookings found" });
@@ -241,23 +237,21 @@ const filterBookings = async (req, res, visitDatesArray) => {
 // };
 
 const getBookingsByGuestName = async (req, res, guestName) => {
-    try {
-        console.log(guestName + "guest name");
-        const guestBookings = await flexiBooking.find(
-            {
-                "$or" : [{guest_name : { $regex: guestName ,$options: "i" }} ]
-          }
-        );
-        //   console.log(guestBookings);
-      if (!guestBookings) {
-        return res.status(404).json({ message: "No bookings found" });
-      }
-      return guestBookings;
-    } catch (error) {
-      return error;
+  try {
+    console.log(guestName + "guest name");
+    const guestBookings = await flexiBooking.find({
+      $or: [{ guest_name: { $regex: guestName, $options: "i" } }],
+    });
+    //   console.log(guestBookings);
+    if (!guestBookings) {
+      return res.status(404).json({ message: "No bookings found" });
     }
-  };
-  
+    return guestBookings;
+  } catch (error) {
+    return error;
+  }
+};
+
 // handleAddBooking, handleGetAllBookings, handleAddPayment, handleGetPaymentBookingsById,handleUpdateBookingById,handleUpdatePaymentByBookingId,handleDeleteBookingById,handleDeletePaymentByBookingId,handleFilterBookings,handleGetBookingsByGuestName
 
 module.exports = {
