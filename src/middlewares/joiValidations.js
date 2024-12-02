@@ -50,8 +50,8 @@ const bookingSchema = Joi.object({
     .messages({
       "array.base": "Invitee must be an array",
     }),
-    day_passes : Joi.number().integer().min(1).required(),
-    sub_total_cost :  Joi.number().integer().required(),
+    // day_passes : Joi.number().integer().min(1).required(),
+    // sub_total_cost :  Joi.number().integer().required(),
   payment_id: Joi.string()
     .optional(),
   
