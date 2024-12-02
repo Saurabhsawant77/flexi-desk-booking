@@ -18,7 +18,6 @@ const addBooking = async (req, res) => {
       company_name,
       special_request,
       invitee,
-
       isActive,
     } = req.body;
 
@@ -41,7 +40,6 @@ const addBooking = async (req, res) => {
       company_name,
       special_request,
       invitee,
-
       isActive,
     });
 
