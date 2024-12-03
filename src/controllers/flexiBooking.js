@@ -321,7 +321,7 @@ const handleGetFlexiBookingsFilterSearch = async (req, res) => {
     const { visit_dates, guest_name,booking_type } = req.query;
     // console.log("Hello Saurabh");
     // let queryConditions = [];
-    
+
     let globalfilter = {};
 
     if (visit_dates) {  
@@ -368,7 +368,7 @@ const handleGetFlexiBookingsFilterSearch = async (req, res) => {
 
     return res.status(200).json({ success: true, data: bookings });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     logger.error("handleGetFlexiBookingsFilterSearch :: Error", error);
     return res
       .status(500)
