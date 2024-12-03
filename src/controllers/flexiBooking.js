@@ -318,12 +318,13 @@ const handleInvoiceEmail = async (req, res) => {
 
 const handleGetFlexiBookingsFilterSearch = async (req, res) => {
   try {
-    const { visit_dates, guest_name } = req.query;
-    console.log("Hello Saurabh");
+    const { visit_dates, guest_name,booking_type } = req.query;
+    // console.log("Hello Saurabh");
+    // let queryConditions = [];
 
-    let queryConditions = [];
+    let globalfilter = {};
 
-    if (visit_dates) {
+    if (visit_dates) {  
       const visitDatesArray = visit_dates
         .split(",")
         .map((date) => new Date(date.trim()));
@@ -333,21 +334,33 @@ const handleGetFlexiBookingsFilterSearch = async (req, res) => {
           .status(400)
           .json({ message: "Invalid date format in visitDates" });
       }
-
-      queryConditions.push({ visit_dates: { $in: visitDatesArray } });
+      const visitDatesFilter = { visit_dates: { $in: visitDatesArray } };
+      globalfilter = {...globalfilter,...visitDatesFilter}
+      // queryConditions.push({ visit_dates: { $in: visitDatesArray } });
     }
 
     if (guest_name) {
-      queryConditions.push({
+      const filter1 = {
         guest_name: { $regex: guest_name, $options: "i" },
-      });
+      };
+      globalfilter = {...globalfilter, ...filter1};
     }
 
-    const finalQuery =
-      queryConditions.length > 0 ? { $or: queryConditions } : {};
+    // if(booking_type) {
+    //   const bookingfilter = {
+    //     booking_type:booking_type
+    //   }
+    //   globalfilter = {...globalfilter, ...bookingfilter};
+    // }
 
-    console.log(finalQuery);
-    const bookings = await getAllBookings(req, res, finalQuery);
+    // console.log(queryConditions, " queryConditions "); //spread operator can be used
+
+    // const finalQuery =
+    //   queryConditions.length > 0 ? { $or : queryConditions } : {};
+
+      // console.log(globalfilter);
+
+    const bookings = await getAllBookings(req, res, globalfilter);
 
     if (!bookings || bookings.length === 0) {
       return res.status(404).json({ message: "No bookings found" });
@@ -355,10 +368,11 @@ const handleGetFlexiBookingsFilterSearch = async (req, res) => {
 
     return res.status(200).json({ success: true, data: bookings });
   } catch (error) {
+    // console.log(error);
     logger.error("handleGetFlexiBookingsFilterSearch :: Error", error);
     return res
       .status(500)
-      .json({ success: false, message: "Internal server error" });
+      .json({ success: false, message: "Internal server error",error });
   }
 };
 

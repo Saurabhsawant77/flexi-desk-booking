@@ -50,13 +50,23 @@ const bookingSchema = Joi.object({
     .messages({
       "array.base": "Invitee must be an array",
     }),
-
-  isActive: Joi.boolean().default(true),
+    // day_passes : Joi.number().integer().min(1).required(),
+    // sub_total_cost :  Joi.number().integer().required(),
+  payment_id: Joi.string()
+    .optional(),
+  
+  isActive: Joi.boolean()
+    .default(true),
 });
+
 
 const bookingSchemaValidation = (req, res, next) => {
   try {
-    console.log("inside booking validation -- ");
+    console.log("inside booking validation -- ",req.body);
+    if (req.body.special_request === '') {
+        console.log(req.body.special_request + " if inside booking validation");
+        req.body.special_request = "NA";
+    }
     const { error, value } = bookingSchema.validate(req.body, {
       abortEarly: false,
     });
