@@ -85,12 +85,13 @@ const bookingSchemaValidation = (req, res, next) => {
   }
 };
 
+//update
 const bookingUpdateSchema = Joi.object({
   booking_type: Joi.string().optional(),
 
   visit_dates: Joi.array().items(Joi.date()).min(1).optional(),
 
-  guest_name: Joi.string().optional(),
+  guest_name: Joi.string().min(3).optional(),
 
   guest_email: Joi.string().email().optional(),
 
@@ -121,7 +122,7 @@ const bookingUpdateSchema = Joi.object({
   invitee: Joi.array()
     .items(
       Joi.object({
-        invitee_name: Joi.string().optional(),
+        invitee_name: Joi.string().min(3).optional(),
         invitee_email: Joi.string().email().optional(),
         invitee_checkin_status: Joi.boolean().default(false),
         invitee_assign_desk: Joi.string().optional(),
