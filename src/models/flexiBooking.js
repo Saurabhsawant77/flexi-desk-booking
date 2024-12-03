@@ -19,10 +19,12 @@ const BookingSchema = new mongoose.Schema(
     guest_email: {
       type: String,
       required: true,
+      unique: true,
     },
     guest_phone: {
       type: Number,
       required: true,
+      unique: true,
     },
     guest_checkin_status: {
       type: Boolean,
@@ -52,7 +54,7 @@ const BookingSchema = new mongoose.Schema(
     invitee: [
       {
         invitee_name: { type: String, required: false },
-        invitee_email: { type: String, required: false },
+        invitee_email: { type: String, required: false, unique: true },
         invitee_checkin_status: { type: Boolean, default: false },
         invitee_assign_desk: { type: String, required: false },
       },
