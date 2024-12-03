@@ -85,6 +85,7 @@ const bookingSchemaValidation = (req, res, next) => {
   }
 };
 
+//update
 const bookingUpdateSchema = Joi.object({
   booking_type: Joi.string().optional(),
 
